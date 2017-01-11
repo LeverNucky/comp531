@@ -1,4 +1,4 @@
-# comp531
+# COMP531
 
 Author: Qiang Wan
 
