@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<body>
+<h1>
+	Pizza Guys Order Form
+</h1>
+<img src="http://www.cartoonbucket.com/wp-content/uploads/2016/07/Pizza-Steve-Holding-Paper.png" width="300" height="450">
+<form id="myForm" method="GET" action="#">
+	<br>Name<br>
+	<input type="text" rows="1" cols="30" placeholder="your name" required>
+	<br>Address: ####Street Name<br>
+	<input type="text" rows="1" cols="30" placeholder="delivery address" required>
+	<br>Phone Number: 123-123-1234<br>
+	<input type="text" rows="1" cols="30" placeholder="123-123-1234" pattern="[\d]{3}-[\d]{3}-[\d]{4}" required >
+	<br><u>Pizza size</u><br>
+	<input type="radio" name="size" value="large" required> Large
+	<input type="radio" name="size" value="medium" required> Medium
+	<input type="radio" name="size" value="small" required> Small
+	<br><u>Pizza Toppings</u><br>
+	<input type="checkbox"> Sausage
+	<input type="checkbox"> Pepper
+	<input type="checkbox"> Olives
+	<input type="checkbox"> Anchovies
+	<input type="checkbox"> Onions
+	<br>
+	<input type="submit" value="Place Order">
+	<input type="reset" value="Clear">
+</form>
+<script>
+	function phoneIsValid(){
+
+	}
+</script>
+</body>
