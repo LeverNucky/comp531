@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta name="author" content="Qiang Wan">
+		<title>RiceBook Sign Up</title>
+	</head>
+
+	<body onload="getCurrentTimestamp()">
+		<form id="myForm" method="GET" action="formProcessor.html">
+			<br>Account Name<br>
+			<input type="text" rows="1" cols="30" name="Name" id="name" placeholder="your name" pattern="[a-zA-Z][a-zA-Z0-9]*" oninvalid="this.setCustomValidity('Do not start with a number; Use letters and numbers only');" oninput="setCustomValidity('')" required>
+			<br>Display Name(Optional)<br>
+			<input type="text" rows="1" cols="30" name="Display_Name" id="display_name" placeholder="your display name">
+			<br>Email Address<br>
+			<input type="text" rows="1" cols="30" name="Email" id="email" placeholder="a@b.com" pattern="[^@]+@[^@]+\.[^@]+" required >
+			<br>Phone Number<br>
+			<input type="text" rows="1" cols="30" name="Phone_Number" id="phone" placeholder="###-###-####" pattern="[\d]{3}-[\d]{3}-[\d]{4}" required>
+			<br>Date of Birth<br>
+			<input type="date" rows="1" cols="30" name="Birth_Of_Date" id="birth" placeholder="2001-01-01" required>
+			<br>Zip Code<br>
+			<input type="text" rows="1" cols="30" name="ZipCode" id="zip" placeholder="#####" pattern="[\d]{5}" required>
+			<br>Password<br>
+			<input type="password" rows="1" cols="30" name="Password" id="pw" placeholder="letters and numbers" required>
+			<br>Password Confirmation<br>
+			<input type="password" rows="1" cols="30" name="Password_Confirmation" id="pw_confirm" placeholder="same as above" required>
+			<input type="hidden" name="Timestamp" id="timestamp">
+			<br>
+			<input type="submit" value="Submit" onclick="return isValidated()">
+			<input type="reset" value="Clear">
+		</form>
+	</body>
+	<script type="text/javascript">
+		function getCurrentTimestamp() {
+			document.getElementById("timestamp").value=new Date().getTime();
+		}
+		function isValidated(){
+			if (document.getElementById("pw").value!=document.getElementById("pw_confirm").value){
+				alert("passwords don't match");
+				return false;
+			}
+			var birthdate=new Date(document.getElementById("birth").value);
+			var now=new Date();
+			if (now-birthdate<18*365*24*3600*1000){
+				alert("you have to be 18 years old or older to register");
+        		return false;  
+			}
+			return true;
+		}
+	</script>
+</html>

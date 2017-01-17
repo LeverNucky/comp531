@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Success</title>
+	<meta name="author" content="Qiang Wan">
+	<style>
+		table, th, td {
+    		border: 1px solid black;
+    		border-collapse: collapse;
+		}
+		th, td {
+   			padding: 5px;
+    		text-align: center;
+		}
+	</style>
+</head>
+<body onload="setTable()">
+	<table id="myTable" style="width:100%">
+		<caption>Account Info</caption>
+	</table>
+</body>
+<script type="text/javascript">
+    function setTable(){
+		var query = decodeURIComponent(window.location.search.substring(1));
+		var substring = query.split('&');
+		var table = document.getElementById("myTable");
+		for(i = 0; i < substring.length; i = i+1){
+			var pairs = substring[i].split('=');
+			var row = table.insertRow(i);
+			var cell1 = row.insertCell(0);
+			if (pairs[0] == "Timestamp"){
+				pairs[1] = new Date(parseInt(pairs[1]));
+			}
+			var cell2 = row.insertCell(1);
+			cell1.innerHTML = pairs[0];
+			cell2.innerHTML = pairs[1];
+		}
+        
+	}
+		
+	
+</script> 
+</html>
