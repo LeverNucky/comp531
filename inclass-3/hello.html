@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+	In class-3
+	</title>
+	<meta name="author" content="Qiang Wan">
+</head>
+<body onload="showMsg()">
+	<p>My name is Qiang Wan</p>
+	<img src="http://www.houstontx.gov/abouthouston/images/BuffaloBayouSunrise.jpg">
+	<p>
+		I went to China Town with my friends last Sunday. We enjoyed some yummy food there and played
+		some borad games. <strong>So fun!</strong>
+		<br>
+		I am also a big fan of Houston. <a href="https://twitter.com/VisitHouston">Check here!</a>
+		<br>
+		Please leave your comment below:
+	</p>
+
+	<textarea id="myTextarea" rows="4" cols="50"></textarea>
+	<br>
+	<button>Submit</button>
+	<input type="button" value="Clear" onclick="clearText()">
+
+	<p><span id="idicator">15 secs left!</span></p>
+	<input type="button" value="Pause" onclick="pause()">
+	<input type="button" value="Resume" onclick="resume()">
+</body>
+<script type="text/javascript">
+	var timer=setInterval(counter,1000);
+	var remainTime=15000;
+	function clearText(){
+		document.getElementById("myTextarea").value="";
+	}
+	function showMsg(){
+		setTimeout(function(){alert("the page will redirect when the counter reaches zero")},5000)
+	}
+	function counter(){
+		document.getElementById("idicator").innerHTML=remainTime/1000-1+" secs left!";
+		remainTime-=1000;
+		if (remainTime==0){
+			window.location="https://www.clear.rice.edu/comp431/sample/hello.html";
+		}
+	}
+	function pause(){
+		clearInterval(timer);
+	}
+	function resume(){
+		timer=setInterval(counter,1000);
+	}
+</script>
+</html>
