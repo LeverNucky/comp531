@@ -9,10 +9,10 @@ var createApp = function(canvas) {
 	c.fillStyle = grad
 	c.fillRect(0, floor, canvas.width, canvas.height)
 
-	// common size for windows
 	var windowSpacing = 2, floorSpacing = 3
 	var windowHeight = 5, windowWidth = 3
-
+	var sun = {x: 5, y: 5, r: 30, t: 0 }
+	var car = {x: 0, height: 20, width: 50, offset: 2.5}
 	// colors of buildings
 	var blgColors = [ 'red', 'blue', 'gray', 'orange'] 
 
@@ -42,11 +42,11 @@ var createApp = function(canvas) {
 	}
 
 	var grow = function(event) {	
-		var xCursor = event.layerX + canvas.offsetLeft
-		var yCursor = event.layerY + canvas.offsetTop
+		var xpos = event.layerX + canvas.offsetLeft
+		var ypos = event.layerY + canvas.offsetTop
 		buildings.forEach(function(building) { 
-			if (building.x < xCursor && xCursor < building.x + building.width &&
-				floor - building.height < yCursor && yCursor < floor)
+			if (building.x < xpos && xpos < building.x + building.width &&
+				floor - building.height < ypos && ypos < floor)
 			{
 				building.height += windowHeight + floorSpacing	
 				c.fillStyle = building.color			
@@ -62,16 +62,10 @@ var createApp = function(canvas) {
 
 	}
 
-
-
-	var sun = {x: 5, y: 5, r: 20, t: 0 }
-	var movingSun = function(){
-		// cover the "shadow"
-		// c.fillStyle = "white"
-		// c.beginPath()
-		// c.arc(sun.x, sun.y, 1.5*sun.r, 0, 2*Math.PI)
-  // 		c.closePath()
-  // 		c.fill()	
+	
+	var draw = function(){
+		
+		c.clearRect(0, 0, canvas.width, canvas.height/2)
 
   		sun.t += 3  		
   		sun.y = sun.r + canvas.height / 10 * (1 + Math.sin(Math.PI * sun.t/180))  		  		
@@ -80,8 +74,7 @@ var createApp = function(canvas) {
   			sun.x = 0
   		}  		
 
-  		// draw the new sun
-		c.fillStyle = "#ffdb4d"
+		c.fillStyle = "red"
 		c.beginPath()
 		c.arc(sun.x, sun.y, sun.r, 0, 2 * Math.PI)	
   		c.closePath()
@@ -100,22 +93,13 @@ var createApp = function(canvas) {
 				}
 			}
 		})
-
-  		setTimeout(movingSun, 50)
-	}
-
-	var car = {x: 0, height: 20, width: 50, offset: 2.5}
-	var movingCar = function(){
-		c.fillStyle="white"
-		c.fillRect(car.x, floor - car.height - 3, car.width, car.height + 3)
-
 		car.x += 3
 		if (car.x > canvas.width) { 
 			car.x = 0
 		}
 
 		// draw the new car
-		c.fillStyle = "grey";
+		c.fillStyle = "blue";
 		c.fillRect(car.x, floor - car.height - car.offset, car.width, car.height)
 		c.fillStyle = "black"
 		c.beginPath();
@@ -126,15 +110,12 @@ var createApp = function(canvas) {
 		c.arc(car.x + car.width - 7, floor - 5, 5, 0, 2 * Math.PI);
 		c.closePath();
 		c.fill()
-
-		setTimeout(movingCar, 50)
 	}
 
+	setInterval(draw,20)
+	canvas.addEventListener("mousedown", grow, false)
 	return {
-		build: build, 
-		grow: grow,
-		movingSun: movingSun,
-		movingCar: movingCar
+		build: build
 	}
 }
 
@@ -142,7 +123,4 @@ window.onload = function() {
 	var canvas = document.querySelector("canvas")
 	var app = createApp(canvas)
 	document.getElementById("build").onclick = app.build
-	canvas.addEventListener("mousedown", app.grow, false)
-	app.movingSun()
-	app.movingCar()
 }
