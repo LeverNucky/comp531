@@ -1,0 +1,14 @@
+.card{
+		margin-right: 20%;
+		margin-left: 20%;
+		margin-bottom: 50px;
+		margin-top: 10px;
+	}
+
+.card:hover{
+	text-shadow: 0.5px 0.5px;
+	box-shadow: 10px 10px;
+}
+
+input {border-radius:3px;border:1px solid #000;}
+body {background-color:#3399ff;color:white;}
