@@ -1,46 +1,37 @@
 window.onload=function(){
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
+
     var earth=new Image(); 
     earth.src= "images/earth.png";
     var background = new Image();
     background.src = "images/background.jpg";
     var spaceship = new Image();
-    spaceship.src = "images/spaceship.jpeg";
+    spaceship.src = "images/spaceship.png";
     var launcher = new Image();
     launcher.src = "images/launcher.png";
-    var ballRadius = 10;
-    var earthRadius=50;
-    var x = canvas.width/2;
-    var y = canvas.height-30;
-    var dx = 2;
-    var dy = -2;
-    var paddleHeight = 10;
-    var paddleWidth = 75;
-    var paddleX = (canvas.width-paddleWidth)/2;
-    var rightPressed = false;
-    var leftPressed = false;
-    var brickRowCount = 5;
-    var brickColumnCount = 3;
-    var brickWidth = 75;
-    var brickHeight = 20;
-    var brickPadding = 10;
-    var brickOffsetTop = 30;
-    var brickOffsetLeft = 30;
+    var objects = new Array(10);
+    var born=new Date();
+    var angle=0;
+    var totalAngle=0;
     var score = 0;
-    var lives = 3;
+    var hp = 100;
+    var rightPressed=false;
+    var leftPressed=false;
+    var fire=true;
+    var lastHit=new Date();
+    var center={x: canvas.width/2, y: canvas.height/2}
+    var earthRadius=30;
+    var spaceshipRadius=50;
 
-    var bricks = [];
-    for(c=0; c<brickColumnCount; c++) {
-        bricks[c] = [];
-        for(r=0; r<brickRowCount; r++) {
-            bricks[c][r] = { x: 0, y: 0, status: 1 };
-        }
+    for (var i = 0; i < objects.length; i++)
+    {
+        objects[i] = getNewRandomDot(canvas.width, canvas.height);
     }
 
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
-    document.addEventListener("mousemove", mouseMoveHandler, false);
+    document.addEventListener("click", mouseMoveHandler, false);
 
     function keyDownHandler(e) {
         if(e.keyCode == 39) {
@@ -48,6 +39,9 @@ window.onload=function(){
         }
         else if(e.keyCode == 37) {
             leftPressed = true;
+        }
+        else if (e.keyCode==70){
+            fire=true;
         }
     }
     function keyUpHandler(e) {
@@ -57,72 +51,44 @@ window.onload=function(){
         else if(e.keyCode == 37) {
             leftPressed = false;
         }
+        else if (e.keyCode==70){
+            
+        }
     }
     function mouseMoveHandler(e) {
         var relativeX = e.clientX - canvas.offsetLeft;
-        if(relativeX > 0 && relativeX < canvas.width) {
-            paddleX = relativeX - paddleWidth/2;
+        if(relativeX<canvas.width/2) {
+            angle+=20;
+            totalAngle+=20;
         }
-    }
-    function collisionDetection() {
-        for(c=0; c<brickColumnCount; c++) {
-            for(r=0; r<brickRowCount; r++) {
-                var b = bricks[c][r];
-                if(b.status == 1) {
-                    if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
-                        dy = -dy;
-                        b.status = 0;
-                        score++;
-                        if(score == brickRowCount*brickColumnCount) {
-                            alert("YOU WIN, CONGRATS!");
-                            document.location.reload();
-                        }
-                    }
-                }
-            }
+        else{
+            angle-=20;
+            totalAngle+=20;
         }
+        
     }
+    
 
-    function drawBall() {
-        ctx.beginPath();
-        ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
+    function drawBall(location) {
+        
+        ctx.drawImage(spaceship,location.x,location.y,spaceshipRadius,spaceshipRadius);
+        
     }
-    function drawPaddle() {
-        ctx.beginPath();
-        ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-    }
-    function drawBricks() {
-        for(c=0; c<brickColumnCount; c++) {
-            for(r=0; r<brickRowCount; r++) {
-                if(bricks[c][r].status == 1) {
-                    var brickX = (r*(brickWidth+brickPadding))+brickOffsetLeft;
-                    var brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
-                    bricks[c][r].x = brickX;
-                    bricks[c][r].y = brickY;
-                    ctx.beginPath();
-                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                    ctx.fillStyle = "#0095DD";
-                    ctx.fill();
-                    ctx.closePath();
-                }
-            }
-        }
-    }
+    
     function drawScore() {
         ctx.font = "16px Arial";
         ctx.fillStyle = "#0095DD";
         ctx.fillText("Score: "+score, 8, 20);
     }
-    function drawLives() {
+    function drawHP() {
         ctx.font = "16px Arial";
         ctx.fillStyle = "#0095DD";
-        ctx.fillText("HP: "+lives, canvas.width-65, 20);
+        ctx.fillText("HP: "+hp, canvas.width-65, 20);
+    }
+    function drawAngel(){
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Total Moved Angle: "+totalAngle, 16, 20);
     }
     function drawEarth(){
         ctx.drawImage(earth,canvas.width/2-earthRadius,canvas.height/2-earthRadius,2*earthRadius,2*earthRadius);
@@ -131,7 +97,9 @@ window.onload=function(){
         var time=new Date();
         ctx.save();
         ctx.translate(canvas.width/2, canvas.height/2);
-        ctx.rotate( ((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds() );
+        
+        ctx.rotate(angle*Math.PI/180);
+        //ctx.rotate( ((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds() );
         ctx.translate(-canvas.width/2, -canvas.height/2);
         ctx.drawImage(launcher,canvas.width/2-30,canvas.height/2-30,60,30)
         ctx.restore();
@@ -139,57 +107,129 @@ window.onload=function(){
     function drawBackground(){
         ctx.drawImage(background,0,0);
     }
+    function drawLine(from, to, hit) {
+        ctx.beginPath();
+        ctx.lineWidth = 5;
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(to.x, to.y);
+        if (hit){
+            ctx.strokeStyle = '#ff0000';
+        }
+        else{
+            ctx.strokeStyle = '#000000';
+        }
+        ctx.stroke();
+    }
+    function getNewDot(x, y) {
+        return { x: x, y: y, xSpeed: (Math.random()>0.5)?Math.floor(Math.random() * 4) + 2:-Math.floor(Math.random() * 4) -2
+            , ySpeed: (Math.random()>0.5)?Math.floor(Math.random() * 4) + 2:-Math.floor(Math.random() * 4) -2};
+    }
+
+    function getNewRandomDot(maxWidth, maxHeight) {
+        var o= {x: (Math.floor(Math.random() * maxWidth*0.9)),y: (Math.floor(Math.random() * maxHeight*0.9))};
+        var center={x: canvas.width/2, y: canvas.height/2}
+        while (calculateDistance(center, o) <= 2*(earthRadius+spaceshipRadius)){
+            o.x = Math.floor(Math.random() * maxWidth*0.9);
+            o.y = Math.floor(Math.random() * maxHeight*0.9);
+        }
+        return getNewDot(o.x,o.y);
+    }
+    function drawFire(from,angle) {
+        ctx.beginPath();
+        ctx.lineWidth = 10;
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(from.x+1000*Math.cos(angle/180*Math.PI), from.y+1000*Math.sin(angle/180*Math.PI));
+        ctx.strokeStyle = '#ff0000';
+        ctx.stroke();
+        
+    }
+    function drawRange(){
+        ctx.beginPath();
+        ctx.arc(canvas.width/2,canvas.height/2,200,0,2*Math.PI);
+        ctx.stroke();
+    }
+    function calculateDistance(from, to) {
+        var xDistance = Math.abs(from.x - to.x);
+        var yDistance = Math.abs(from.y - to.y);
+        
+        return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+    }
+    function calcAngel(from,to){
+        return Math.atan2(to.y - from.y, to.x - from.x)* 180 / Math.PI;
+    }
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBackground();
         drawEarth();
-        drawLauncher()
-        drawBricks();
-        drawBall();
-        drawPaddle();
+        drawLauncher();
+        drawRange();
         drawScore();
-        drawLives();
-        
-        collisionDetection();
-        
-        
-        if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-            dx = -dx;
-        }
-        if(y + dy < ballRadius) {
-            dy = -dy;
-        }
-        else if(y + dy > canvas.height-ballRadius) {
-            if(x > paddleX && x < paddleX + paddleWidth) {
-                dy = -dy;
+        drawHP();
+        drawAngle();
+        var curTime=new Date();
+        if (fire){
+            if ((curTime.getTime()-lastHit.getTime())<3000){
+                fire=false;
             }
-            else {
-                lives--;
-                if(!lives) {
-                    alert("GAME OVER");
-                    document.location.reload();
+            else{
+                lastHit=curTime;
+            }  
+        }
+
+        objects.forEach(function(object, index, arr){
+            
+            var o=object;
+            drawBall(o);
+            if(calculateDistance(center, o) <= 200) {
+                if(Math.abs(calcAngel(center,o)-angle)<=5){
+                    
+                    //hit the spaceship
+                    drawLine(center,o,true);
+                    arr.splice(index, 1);
+                    score+=10;
+                    return
                 }
-                else {
-                    x = canvas.width/2;
-                    y = canvas.height-30;
-                    dx = 3;
-                    dy = -3;
-                    paddleX = (canvas.width-paddleWidth)/2;
-                }
+              
             }
+            if(calculateDistance(center, o) <= (earthRadius+spaceshipRadius)) {
+                hp-=10;
+                arr.splice(index, 1);
+                
+            }
+            
+            object.x += o.xSpeed;
+            object.y += o.ySpeed;
+            
+            if(object.x >= canvas.width-spaceshipRadius || object.x <= 0)
+            {
+                object.xSpeed *= -1;
+            }
+            
+            if(object.y >= canvas.height-spaceshipRadius || object.y <= 0)
+            {
+                object.ySpeed *= -1;
+            } 
+               
+        })
+        if (rightPressed){
+            angle+=5;
+            totalAngle+=5;
         }
+        if (leftPressed){
+            angle-=5;
+            totalAngle+=5;
+        }
+        drawFire(center,angle);
+        if(hp===0) {
+                var die=new Date();
+
+                alert("GAME OVER! YOUR SCORE IS "+score+". YOU SURVIVED FOR "+ (die.getTime()-born.getTime())/1000+"s");
+                document.location.reload();
+            }
         
-        if(rightPressed && paddleX < canvas.width-paddleWidth) {
-            paddleX += 7;
-        }
-        else if(leftPressed && paddleX > 0) {
-            paddleX -= 7;
-        }
         
-        x += dx;
-        y += dy;
         requestAnimationFrame(draw);
     }
-
     draw();
+    setInterval(function(){ objects.push(getNewRandomDot(canvas.width, canvas.height)) }, 1000);
 }
