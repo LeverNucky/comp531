@@ -14,7 +14,7 @@ const Nav = ({username, onProfile, dispatch}) => (
                     <span className="icon-bar"/>
                 </button>
                 <img className="navbar-brand" name="ricelogo" src="https://s-media-cache-ak0.pinimg.com/originals/ab/66/80/ab66803f1bf1a9bf2bddca5209202fa1.jpg"/>
-                <a className="navbar-brand" href="#">RiceBook</a>
+                <a className="navbar-brand" href="#"> RiceBook</a>
             </div>
             <div className="nav navbar-nav navbar-right">
                 <ul className="nav navbar-nav">
@@ -22,10 +22,11 @@ const Nav = ({username, onProfile, dispatch}) => (
                         <div className="nav navbar-nav navbar-right">
                             <ul className="nav navbar-nav">
                                 { onProfile ?
-                                    <li><a href="#" onClick={() => { dispatch(navToMain()) }}><span className="glyphicon glyphicon-home"/>Home</a></li> :
-                                    <li><a href="#" onClick={() => { dispatch(navToProfile()) }}><span className="glyphicon glyphicon-user"/>Edit Profile</a></li>
+                                    <li><button className="btn btn-default" onClick={() => { dispatch(navToMain()) }}><span className="glyphicon glyphicon-home"/> Home</button></li>:
+                                    <li><button className="btn btn-default" onClick={() => { dispatch(navToProfile()) }}><span className="glyphicon glyphicon-user"/> Edit Profile</button></li>
+                                
                                 }
-                                <li><a href="#" onClick={() => { dispatch(logout()) }}><span className="glyphicon glyphicon-log-out"/>Log out {username} </a></li>
+                                <li><button className="btn btn-default" onClick={() => { dispatch(logout()) }}><span className="glyphicon glyphicon-log-out"/>Log out {username} </button></li>
                                 <li>&nbsp;</li>>
                             </ul>
                         </div>

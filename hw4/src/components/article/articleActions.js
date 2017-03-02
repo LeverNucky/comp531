@@ -3,11 +3,13 @@ import Action, { resource } from '../../actions'
 const _articles = require('../../data/articles.json')
 
 function getRandomInt(min, max) {
+	//supply function
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export function fetchArticles() {
 	return (dispatch, getState) => {
+		//Initialization for articles
 		const articles = _articles['articles'].reduce((o,v) => {
 			v.date=new Date(v.date).toString()
 
@@ -29,6 +31,7 @@ export function fetchArticles() {
 
 export function uploadArticle(message, file) {
 	return (dispatch,getState) => {
+		//Add a new article
 		var d=new Date().toString()
 		const new_article={"_id":getRandomInt(1000000,9999999),"text":message,"date":d,"img":null,"comments":[],"author":getState().profile.username}
 		dispatch({ type: Action.ADD_ARTICLE, article:new_article})

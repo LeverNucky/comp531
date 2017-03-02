@@ -35,11 +35,12 @@ const Landing = () => (
     <div>
         <div className="container">
             <div className="jumbotron text-center">
-                <h1>Welcome to RiceBook!</h1>
+                <h1>Welcome to RiceBook</h1>
             </div>
             <ErrorMessage/>
-            <Login />
+            
             <Register />
+            <Login />
         </div>
     </div>
 )

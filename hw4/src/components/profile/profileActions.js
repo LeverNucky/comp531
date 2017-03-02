@@ -3,6 +3,7 @@ import Action, { updateError, resource } from '../../actions'
 const _profile = require('../../data/profile.json')
 
 export function validateProfile({email, zipcode, name, phone}) {
+    //Validate the profile input content
     if (name) {
         if (!name.match('^[a-zA-Z][a-zA-Z0-9]+')) {
             return 'Invalid username. Username must start with a letter and can only contains letters and numbers.'
@@ -37,6 +38,7 @@ export function updateHeadline(headline) {
 
 export function updateProfile({email, zipcode, name, phone}) {
     return (dispatch) => {
+        //Initialization for Profile 
         const err = validateProfile({email, zipcode, name, phone})
         if (err.length > 0) {
             return dispatch(updateError(err))
@@ -62,6 +64,7 @@ export function fetchProfile() {
 
 function updateField(field, value) {
     return (dispatch) => {
+        //General method for updating one field
         const action = { type: Action.UPDATE_PROFILE }
         action[field] = value
         if (field == 'dob')
@@ -73,6 +76,7 @@ function updateField(field, value) {
 
 function fetchField(field) {
     return (dispatch) => {
+        //General method for fetching one field
         const action = { type: Action.UPDATE_PROFILE }
         switch(field) {
             case 'avatar':

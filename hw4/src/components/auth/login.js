@@ -5,17 +5,21 @@ import {login} from './authActions'
 const Login = ({dispatch})=> {
     let username, password
     return (
-        <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-center">
             <h2>Log In</h2>
-            <p>
-                <b>User Name</b><br/>
-                <input type="text" id="login_username" ref={(node) => { username = node }}/>
-            </p>
-            <p>
-                <b>Password</b><br/>
-                <input type="password" id="index_login_password" ref={(node) => { password = node }}/>
-            </p>
-            <input type="submit" className="btn-success" id="index_login_btn" value="Log In!" onClick={() => {dispatch(login(username.value, password.value))}} />
+            <div className="form-group row">
+                <label className="col-sm-3 form-control-label" >Username</label>
+                <div className="col-sm-6">
+                    <input className="form-control" id="login_username" type="text" ref={(node) => {username = node} }/>
+                </div>
+            </div>
+            <div className="form-group row">
+                <label className="col-sm-3 form-control-label" >Password</label>
+                <div className="col-sm-6">
+                    <input className="form-control" id="login_username" type="text" ref={(node) => {password = node} }/>
+                </div>
+            </div>
+            <input type="submit" className="btn-success" id="index_login_btn" value="Log In" onClick={() => {dispatch(login(username.value, password.value))}} />
         </div>
     )
 }

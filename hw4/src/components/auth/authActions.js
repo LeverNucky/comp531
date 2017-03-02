@@ -6,6 +6,7 @@ import { fetchProfile } from '../profile/profileActions'
 
 export function initialMainView() {
     return (dispatch) => {
+        //Initialize before entering main page
         dispatch(navToMain())
         dispatch({type: Action.UPDATE_HEADLINE,
             headline: "Default headline"
@@ -18,6 +19,7 @@ export function initialMainView() {
 
 export function login(username, password) {
     return (dispatch) => {
+        //Log In, allow any non-empty username and password now
         if (username && password){
             dispatch({type: Action.LOGIN, username: username})
             dispatch(initialMainView())
@@ -30,6 +32,7 @@ export function login(username, password) {
 
 export function logout() {
     return (dispatch) => {
+        //Log out
         dispatch({type:Action.LOGOUT})
         dispatch(navToLanding())   
     }

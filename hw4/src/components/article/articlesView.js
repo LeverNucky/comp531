@@ -11,7 +11,6 @@ const ArticlesView = ({username, articles, dispatch}) => {
     return (
         <div>
             <h3>News Feed</h3>
-            <NewArticle/>
             <div className="well">
                 <div>
                     <input className="form-control" type="text" placeholder="search your feed"
@@ -19,6 +18,8 @@ const ArticlesView = ({username, articles, dispatch}) => {
                            onChange={() => { dispatch(searchKeyword(keyword.value)) }}/>
                 </div>
             </div>
+            <NewArticle/>
+            
             { articles.sort((a,b) => {
                 if (new Date(a.date) < new Date(b.date))
                     return 1
