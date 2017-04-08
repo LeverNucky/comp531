@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import Login from './login'
 import Register from './register'
 
-let ErrorMessage = ({error, success}) => (
+//Show the failure or success message
+let Messages = ({error, success}) => (
     <div className="row">
         { error.length == 0 ? '' :
             <div className="alert alert-danger">
@@ -23,13 +24,9 @@ let ErrorMessage = ({error, success}) => (
         }
     </div>
 )
-ErrorMessage.propTypes = {
-    error: PropTypes.string.isRequired,
-    success: PropTypes.string.isRequired
-}
-ErrorMessage = connect((state) => {
+Messages = connect((state) => {
     return { error: state.common.error, success: state.common.success }
-})(ErrorMessage)
+})(Messages)
 
 const Landing = () => (
     <div>
@@ -37,7 +34,7 @@ const Landing = () => (
             <div className="jumbotron text-center">
                 <h1>Welcome to RiceBook</h1>
             </div>
-            <ErrorMessage/>
+            <Messages/>
             
             <Register />
             <Login />

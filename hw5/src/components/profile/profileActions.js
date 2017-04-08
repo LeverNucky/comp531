@@ -1,63 +1,48 @@
-import Action, { updateError, resource } from '../../actions'
-
-const _profile = require('../../data/profile.json')
-
-export function validateProfile({email, zipcode, name, phone}) {
-    //Validate the profile input content
-    if (name) {
-        if (!name.match('^[a-zA-Z][a-zA-Z0-9]+')) {
-            return 'Invalid username. Username must start with a letter and can only contains letters and numbers.'
-        }
-    }
-
-    if (email) {
-        if (!email.match('^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z][a-zA-Z]+$')) {
-            return 'Invalid email.  Must be have format a@b.c'
-        }
-    }
-
-    if (zipcode) {
-        if (!zipcode.match('^[0-9]{5}$')) {
-            return 'Invalid zipcode. Must be 5 digits. e.g., 77005'
-        }
-    }
-    if (phone) {
-        if (!phone.match('^[0-9]{3}-[0-9]{3}-[0-9]{4}$')) {
-            return 'Invalid phone. Must have format as 123-123-1234'
-        }
-    }
-
-    return ''
-}
+import Action, {updateSuccess, updateError, resource } from '../../actions'
 
 export function updateHeadline(headline) {
+    const action = { type: Action.UPDATE_PROFILE }
     return (dispatch) => {
-        dispatch(updateField('headline', headline))
+        resource('PUT', 'headline', {headline})
+        .then((response) => {
+            action.headline=response.headline
+            dispatch(action)
+        })
+        .catch((err)=>{
+            dispatch(updateError(err))
+        })
     }
 }
 
-export function updateProfile({email, zipcode, name, phone}) {
+export function fetchHeadline(username) {
+    return (dispatch) => {
+        return resource('GET',username?`headlines/${username}`:'headlines').then((r)=>{
+            dispatch({type:Action.UPDATE_PROFILE, username:r.headlines[0].username, headline: r.headlines[0].headline})
+        })
+    }
+}
+
+export function updateProfile(profile) {
     return (dispatch) => {
         //Initialization for Profile 
-        const err = validateProfile({email, zipcode, name, phone})
-        if (err.length > 0) {
-            return dispatch(updateError(err))
+
+        if ((profile.pw.value!==profile.pwconf.value)){
+            dispatch(updateError("password and password confirmation don't match"))
+            return
         }
-        dispatch(updateField('email', email))
-        dispatch(updateField('zipcode', zipcode))
-        dispatch(updateField('name', name))
-        dispatch(updateField('phone', phone))
+        dispatch(updateField('email', profile.email.value))
+        dispatch(updateField('zipcode', profile.zipcode.value))
+        dispatch(updateField('password', profile.pw.value))
+        dispatch(updateSuccess("Successfully updated!"))
     }
 }
 
 export function fetchProfile() {
     return (dispatch) => {
-        dispatch(fetchField('avatar'))
+        dispatch(fetchField('avatars'))
         dispatch(fetchField('zipcode'))
         dispatch(fetchField('email'))
-        dispatch(fetchField('name'))
         dispatch(fetchField('dob'))
-        dispatch(fetchField('phone'))
 
     }
 }
@@ -66,11 +51,30 @@ function updateField(field, value) {
     return (dispatch) => {
         //General method for updating one field
         const action = { type: Action.UPDATE_PROFILE }
-        action[field] = value
+
         if (field == 'dob')
             dispatch(updateError('Can\'t change dob'))
-        else
-            dispatch(action)
+        if (value){
+            let payload
+            switch(field){
+                case 'email': payload={email:value}; break;
+                case 'zipcode': payload={zipcode:value}; break;
+                case 'password': payload={password:value}; break;
+            }
+            resource('PUT',field,payload)
+            .then((r)=>{
+                action[field] = r[field]
+                if(field=="password"){
+                    dispatch(updateSuccess("You can't change your password, sorry."))
+                }
+                else{
+                    dispatch(action)
+                }
+                
+            })
+        }
+        
+        
     }
 }
 
@@ -78,28 +82,32 @@ function fetchField(field) {
     return (dispatch) => {
         //General method for fetching one field
         const action = { type: Action.UPDATE_PROFILE }
-        switch(field) {
-            case 'avatar':
-                action.avatar = _profile.avatar; break;
-            case 'email':
-                action.email = _profile.email; break;
-            case 'zipcode':
-                action.zipcode = _profile.zipcode; break;
-            case 'dob':
-                action.dob = _profile.dob; break;
-            case 'name':
-                action.name = _profile.name; break;
-            case 'phone':
-                action.phone = _profile.phone; break;
-        }
-        dispatch(action)
+        resource('GET',field)
+        .then((r)=>{
+            switch(field) {
+                case 'avatars':
+                    action.avatar = r.avatars[0].avatar; break;
+                case 'email':
+                    action.email = r.email; break;
+                case 'zipcode':
+                    action.zipcode = r.zipcode; break;
+                case 'dob':
+                    action.dob = r.dob; break;
+            }
+            dispatch(action)
+        })
+        
     }
 }
 
-export function uploadImage(file) {
-    return (dispatch) => {
-        // Upload the new avatar (Not implemented yet)
-        return dispatch(updateError("Upload not implemented yet"))
-        
+export const uploadImage=(fd)=> {
+    return (dispatch)=>{
+        resource('PUT','avatar',fd,false)
+        .then((response)=>{
+            dispatch(updateSuccess("Successfully updated!"))
+            dispatch({type:Action.UPDATE_PROFILE,avatar:response.avatar})
+        }).catch((err)=>{
+            dispatch(updateError(err))
+        })
     }
 }

@@ -1,26 +1,52 @@
 import { combineReducers } from 'redux'
 import Action from './actions'
 
-function followers(state = { followers: {} }, action) {
+export function followers(state = { followers: {} }, action) {
     switch(action.type) {
-        case Action.ADD_FOLLOWER:
-            return { ...state, followers:[...state.followers,action.follower]}
-        case Action.REMOVE_FOLLOWER:
-            return { ...state, followers:state.followers.filter((t)=>t.name!=action.name)}
+        case Action.UPDATE_FOLLOWERS:
+            return { ...state, followers: action.followers};
         default:
             return state
     }
 }
 
-function articles(state = { articles: {}, searchKeyword: '', avatars: {} }, action) {
+export function articles(state = { articles: {}, searchKeyword: '', avatars: {} }, action) {
     switch(action.type) {
         case Action.ADD_ARTICLE:
-            console.log(state.articles)
             const articles = { ...state.articles }
             articles[action.article['_id']] = action.article
             return { ...state, articles }
         case Action.UPDATE_ARTICLES:
-            return { ...state, articles: action.articles }
+            return {...state,
+                articles:Object.keys(action.articles).map((_id)=> action.articles[_id])
+                .map((article)=>({...article,
+                    showComments:false,
+                    showAddcomment:false,
+                    editMode:false,
+                    comments:!article.comments?[]:article.comments.sort((a,b)=>{
+                        if (new Date(a.date) < new Date(b.date))
+                            return 1
+                        if (new Date(a.date) > new Date(b.date))
+                            return -1
+                        return 0
+                    }) 
+                }))};
+
+        case Action.TOGGLE_SHOW_ADD_COMMENT:
+            return {...state,articles:state.articles.map((article)=>{
+                return {...article,
+                    showAddcomment:article._id===action._id?!article.showAddcomment:article.showAddcomment}
+        })}
+        case Action.TOGGLE_SHOW_COMMENTS:
+            return {...state,articles:state.articles.map((article)=>{
+                return {...article,
+                    showComments:article._id==action._id?!article.showComments:article.showComments}
+            })}
+        case Action.TOGGLE_EDIT_MODE:
+            return {...state,articles:state.articles.map((article)=>{
+                return {...article,
+                    editMode:article._id==action._id?!article.editMode:article.editMode}
+            })}
         case Action.UPDATE_AVATARS:
             return { ...state, avatars: action.avatars }
         case Action.SEARCH_KEYWORD:
@@ -30,12 +56,10 @@ function articles(state = { articles: {}, searchKeyword: '', avatars: {} }, acti
     }
 }
 
-function profile(state = { username:'', headline: '', avatar: '', zipcode: '', email: '', dob: '' ,phone: ''}, action) {
+export function profile(state = { username:'', headline: '', avatar: '', zipcode: '', email: '', dob: '',password: ''}, action) {
     switch (action.type) {
-        case Action.UPDATE_HEADLINE:
-            return {...state, headline: action.headline}
         case Action.LOGIN:
-            return {...state, username: action.username}
+            return {...state, username: action.username, password: action.password}
         case Action.LOGOUT:
             return {...state, username: ''}
         case Action.UPDATE_PROFILE:
@@ -44,14 +68,14 @@ function profile(state = { username:'', headline: '', avatar: '', zipcode: '', e
             if (action.zipcode) return { ...state, zipcode: parseInt(action.zipcode) }
             if (action.email) return { ...state, email: action.email }
             if (action.dob) return {...state, dob: action.dob}
-            if (action.phone) return {...state, phone: action.phone}
             if (action.name) return {...state, username: action.name}
+            if (action.password) return {...state, password: action.password}
         default:
             return state
     }
 }
 
-function common(state = { error:'', success:'', location:'' }, action) {
+export function common(state = { error:'', success:'', location:'' }, action) {
     const clean = { error: '', success: '' }
     switch (action.type) {
         case Action.SUCCESS:
@@ -68,8 +92,8 @@ function common(state = { error:'', success:'', location:'' }, action) {
             return { ...state, ...clean }
     }
 }
-
-const Reducer = combineReducers({
+//reducers
+export const Reducer = combineReducers({
     articles, profile, followers, common
 })
 

@@ -1,16 +1,14 @@
-import Action, { resource, updateError, navToMain, navToLanding } from '../../actions'
+import Action, { resource, updateSuccess, updateError, navToMain, navToLanding } from '../../actions'
 
 import { fetchFollowers } from '../main/followingActions'
 import { fetchArticles } from '../article/articleActions'
-import { fetchProfile } from '../profile/profileActions'
+import { fetchProfile,fetchHeadline } from '../profile/profileActions'
 
 export function initialMainView() {
     return (dispatch) => {
         //Initialize before entering main page
         dispatch(navToMain())
-        dispatch({type: Action.UPDATE_HEADLINE,
-            headline: "Default headline"
-        })
+        dispatch(fetchHeadline())
         dispatch(fetchProfile())
         dispatch(fetchFollowers())
         dispatch(fetchArticles())
@@ -18,22 +16,58 @@ export function initialMainView() {
 }
 
 export function login(username, password) {
-    return (dispatch) => {
-        //Log In, allow any non-empty username and password now
-        if (username && password){
-            dispatch({type: Action.LOGIN, username: username})
+    return (dispatch)=>{
+        return resource('POST', 'login', {
+            username,password
+        })
+        .then((r)=>{
+            dispatch({type: Action.LOGIN,username: r.username})
             dispatch(initialMainView())
-        }
-        else{
-            dispatch(updateError('Missing username or password when logging in'))
-        }
-    }
+        })
+        .catch((err)=>dispatch(updateError('Invalid login')))
+    };
 }
 
 export function logout() {
-    return (dispatch) => {
-        //Log out
-        dispatch({type:Action.LOGOUT})
-        dispatch(navToLanding())   
+    return (dispatch)=>{         
+        return resource('PUT', 'logout')
+        .then((r)=>{
+            dispatch({type:Action.LOGOUT})
+            dispatch(navToLanding()) 
+        })
+        .catch((err)=>dispatch(updateError('Invalid logout')))
+    };
+}
+
+export function registerAction(info){
+    //validate the register input
+    return (dispatch)=>{
+        if(info.pw.value!==info.pwconf.value){
+              dispatch(updateError('password and password confirm is not equal'))
+              return;
+        }
+        const birthdate=new Date(info.dob.value);
+        const curdate=new Date();
+        const diffyear=curdate.getFullYear()-birthdate.getFullYear();
+        const diffmon=curdate.getMonth()-birthdate.getMonth();
+        const diffday=curdate.getDate()-birthdate.getDate();
+        if (!(diffyear>18||(diffyear==18&&diffmon>=0)||(diffyear==18&&diffmon==0&&diffday>=0))) {
+            dispatch(updateError('Only people age more than 18 are eligible to register'))
+            return;           
+        }
+        const payload = {
+            username: info.username.value,
+            email: info.email.value,
+            dob: info.dob.value,
+            zipcode: info.zipcode.value,
+            password: info.pw.value
+        }
+        resource('POST', 'register', payload)
+        .then((response) => {
+            dispatch(updateSuccess("Register succeed!"))
+        })
+        .catch((error) => {
+            dispatch(updateError("Register error: "+error));
+        })
     }
 }

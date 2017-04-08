@@ -1,43 +1,64 @@
-import Action, { updateError } from '../../actions'
-const _followers = require('../../data/followers.json')
+import Action, { updateError, resource} from '../../actions'
+import { fetchArticles } from '../article/articleActions'
+import Promise from 'bluebird'
 
-function makeid()
-{
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for( var i=0; i < 5; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
+export function delFollower(name) {
+	return (dispatch)=>{
+        resource('DELETE','following/'+name).then((r)=>{
+            dispatch(fetchFollowers())
+            dispatch(fetchArticles())
+        })
+    } 
+}
+export function addFollower(name) { 
+	return (dispatch)=>{
+        if(!name||name==''){
+            dispatch(updateError("Invalid username"))
+            return;
+        }
+        resource('PUT','following/'+name).then((r)=>{
+            if(r.following.indexOf(name)<0){
+                dispatch(updateError("No such user"))
+                return;
+            }
+            dispatch(fetchFollowers())
+            dispatch(fetchArticles())
+        })
+    }   
 }
 
+export function fetchFollowers() {
+	return (dispatch)=>{
+		//Update the followers list whenever adding or deleting or initiating
+        resource('GET','following')
+        .then((r)=>{
+        	
+	        const followers =  r.following.reduce((followerMap,follower)=>{
+	                followerMap[follower] = {name: follower}
+	                return followerMap;
+	            },{})
+	        const followersQuery = r.following.join(',')
+	 
 
-export function delFollower(name) { return fetchFollowers('DEL', name) }
-export function addFollower(name) { return fetchFollowers('ADD', name) }
-
-export function fetchFollowers(method, name) {
-	return (dispatch, getState) => {
-		if (method == 'ADD' && getState().followers.followers[name]) {
-			return dispatch(updateError(`Already following ${name}`))
-		}
-
-		if (method == 'ADD' && !name) {
-			return dispatch(updateError(`${name} is not a valid user`))
-		}
-		//Three cases: ADD, DEL, or default 
-		if (!method){
-			_followers.followers.forEach((f)=>{
-				dispatch({type:Action.ADD_FOLLOWER, follower:f})
-			})
-			return
-		}
-		if (method==="ADD"){
-			return dispatch({type:Action.ADD_FOLLOWER, follower:{"name":name,"headline":makeid(),"avatar":"http://lorempixel.com/102/100/"}})
-		}
-		if (method==="DEL"){
-			console.log(name)
-			return dispatch({type:Action.REMOVE_FOLLOWER,name:name})
-		}
-	}
+	        const followersHeadline = resource('GET',`headlines/${followersQuery}`)
+                                  .then((r)=>{
+                                    r.headlines.forEach((item)=>{
+                                        followers[item.username].headline = item.headline; 
+                                    })
+                                  })
+        	const followersAvatar = resource('GET',`avatars/${followersQuery}`)
+                                  .then((r)=>{
+                                    r.avatars.forEach((item)=>{
+                                        followers[item.username].avatar = item.avatar; 
+                                    })
+                                  })
+            //Make the promise, otherwise the headline and avatar would not show up
+	        Promise.all([followersHeadline,followersAvatar])
+	        .then(()=>{
+	            dispatch({type:Action.UPDATE_FOLLOWERS, followers})
+	        	})
+        	})
+        	.catch((err)=>{dispatch(updateError(err))
+    	})
+    }
 }

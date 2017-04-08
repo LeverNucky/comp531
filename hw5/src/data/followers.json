@@ -1,7 +1,0 @@
-{
-	"followers":[
-		{"name":"user1","headline":"headline1","avatar":"http://lorempixel.com/100/100/"},
-		{"name":"user2","headline":"headline2","avatar":"http://lorempixel.com/99/100/"},
-		{"name":"user3","headline":"headline3","avatar":"http://lorempixel.com/101/100/"}
-	]
-}

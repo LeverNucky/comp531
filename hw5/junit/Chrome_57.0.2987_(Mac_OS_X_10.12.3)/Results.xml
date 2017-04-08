@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome 57.0.2987 (Mac OS X 10.12.3)" package="" timestamp="2017-04-08T00:49:02" id="0" hostname="will-2.local" tests="20" errors="0" failures="0" time="0.029">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36"/>
+  </properties>
+  <testcase name="Validate Action resource should be a resource (i.e., mock a request)" time="0.002" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Action"/>
+  <testcase name="Validate Action resource should give me the http error" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Action"/>
+  <testcase name="Validate Action should update error message (for displaying error mesage to user)" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Action"/>
+  <testcase name="Validate Action should update success message (for displaying success message to user)" time="0.001" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Action"/>
+  <testcase name="Validate Action Test Actions: should navigate (to profile, main, or landing)" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Action"/>
+  <testcase name="Validate Article actions should fetch articles (mocked request)" time="0.001" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Article actions"/>
+  <testcase name="Validate Article actions should update the search keyword" time="0.001" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Article actions"/>
+  <testcase name="ArticlesView (component tests) should render articles" time="0.008" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).ArticlesView (component tests)"/>
+  <testcase name="ArticlesView (component tests) should dispatch actions to create a new article" time="0.013" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).ArticlesView (component tests)"/>
+  <testcase name="Validate Authentication should not log an user with wrong password and username" time="0.001" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Authentication"/>
+  <testcase name="Validate Authentication should log in a user" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Authentication"/>
+  <testcase name="Validate Authentication should log out a user" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Authentication"/>
+  <testcase name="Validate Profile actions (mocked requests) should fetch the user's proile information" time="0.001" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Profile actions (mocked requests)"/>
+  <testcase name="Validate Profile actions (mocked requests) should update headline" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Profile actions (mocked requests)"/>
+  <testcase name="Validate Reducer should initialize state" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Reducer"/>
+  <testcase name="Validate Reducer should state success (for displaying success message to user)" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Reducer"/>
+  <testcase name="Validate Reducer should state error (for displaying error message to user)" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Reducer"/>
+  <testcase name="Validate Reducer should set the articles" time="0.001" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Reducer"/>
+  <testcase name="Validate Reducer should set the search keyword" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Reducer"/>
+  <testcase name="Validate Reducer should filter displayed articles by the search keyword" time="0" classname="Chrome_57_0_2987_(Mac_OS_X_10_12_3).Validate Reducer"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

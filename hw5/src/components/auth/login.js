@@ -16,10 +16,10 @@ const Login = ({dispatch})=> {
             <div className="form-group row">
                 <label className="col-sm-3 form-control-label" >Password</label>
                 <div className="col-sm-6">
-                    <input className="form-control" id="login_username" type="text" ref={(node) => {password = node} }/>
+                    <input className="form-control" id="login_password" type="text" ref={(node) => {password = node} }/>
                 </div>
             </div>
-            <input type="submit" className="btn-success" id="index_login_btn" value="Log In" onClick={() => {dispatch(login(username.value, password.value))}} />
+            <input type="submit" className="btn-success" id="login_btn" value="Log In" onClick={() => {dispatch(login(username.value, password.value))}} />
         </div>
     )
 }

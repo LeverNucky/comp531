@@ -8,7 +8,6 @@ import Nav from './main/nav'
 
 const App = ({location}) => {
     let view
-    
     if (location == 'main') {
         view = <Main />
     } else if (location == 'profile') {
