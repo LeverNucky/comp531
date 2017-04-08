@@ -40,6 +40,7 @@ export function logout() {
 }
 
 export function registerAction(info){
+    //validate the register input
     return (dispatch)=>{
         if(info.pw.value!==info.pwconf.value){
               dispatch(updateError('password and password confirm is not equal'))

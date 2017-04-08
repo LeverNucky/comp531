@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Login from './login'
 import Register from './register'
 
+//Show the failure or success message
 let Messages = ({error, success}) => (
     <div className="row">
         { error.length == 0 ? '' :

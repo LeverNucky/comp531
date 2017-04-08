@@ -10,7 +10,7 @@ let Messages = ({error, success}) => (
             { error.length == 0 ? '' :
                 <div className="alert alert-danger">
                     <div className="col-sm-1"></div>
-                    <div className="col-sm-10" id="errorMessage">{error}</div>
+                    <div className="col-sm-10" id="error_Message">{error}</div>
                     <div className="col-sm-1"></div>
                     <div className="row">&nbsp;</div>
                 </div>
@@ -18,7 +18,7 @@ let Messages = ({error, success}) => (
             { success.length == 0 ? '' :
                 <div className="alert alert-success">
                     <div className="col-sm-1"></div>
-                    <div className="col-sm-10" id="successMessage">{success}</div>
+                    <div className="col-sm-10" id="success_Message">{success}</div>
                     <div className="col-sm-1"></div>
                     <div className="row">&nbsp;</div>
                 </div>

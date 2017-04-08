@@ -16,53 +16,60 @@ const ProfileForm= ({dispatch,oldZipcode,oldDob,oldPw,oldEmail})=>{
         return month + "/" + day + "/" + year;
     }   
     return (
-        <form onSubmit={(e) => {
-            e.preventDefault()
-            
-        }}>
-            <div className="form-group row">
-                <label className="col-sm-3 form-control-label">Date of Birth</label>
-                <div className="col-sm-6">
-                    {GetFormattedDate(oldDob)}
+        <div>
+            <div className="panel panel-default">
+                <div className="panel-body">
+                    <p>Current Info:</p>
+                    <span>
+                        <p id="current_dob">Date of Birth: {GetFormattedDate(oldDob)}</p>
+                        <p id="current_email">Email Address: {oldEmail}</p>
+                        <p id="current_zipcode">Zipcode: {oldZipcode}</p>
+                    </span>
                 </div>
+                
             </div>
-            <div className="form-group row">
-                <label className="col-sm-3 form-control-label">Email</label>
-                <div className="col-sm-6">
-                    <input className="form-control" id="email" type="text" placeholder={oldEmail} pattern="[^@]+@[^@]+\.[^@]+" 
-                           ref={(node) => payload.email = node }/>
+            <form onSubmit={(e) => {
+                e.preventDefault()
+                
+            }}>
+                <div className="form-group row">
+                    <label className="col-sm-3 form-control-label">Email</label>
+                    <div className="col-sm-6">
+                        <input className="form-control" id="profile_email" type="text" placeholder={oldEmail} pattern="[^@]+@[^@]+\.[^@]+" 
+                               ref={(node) => payload.email = node }/>
+                    </div>
                 </div>
-            </div>
-            <div className="form-group row">
-                <label className="col-sm-3 form-control-label">Zipcode</label>
-                <div className="col-sm-6">
-                    <input className="form-control" id="zipcode" type="text" placeholder={oldZipcode} pattern="[\d]{5}" 
-                           ref={(node) => payload.zipcode = node }/>
+                <div className="form-group row">
+                    <label className="col-sm-3 form-control-label">Zipcode</label>
+                    <div className="col-sm-6">
+                        <input className="form-control" id="profile_zipcode" type="text" placeholder={oldZipcode} pattern="[\d]{5}" 
+                               ref={(node) => payload.zipcode = node }/>
+                    </div>
                 </div>
-            </div>
-            <div className="form-group row">
-                <label className="col-sm-3 form-control-label">Password</label>
-                <div className="col-sm-6">
-                    <input className="form-control" id="pw" type="text" placeholder={oldPw}
-                           ref={(node) => payload.pw = node }/>
+                <div className="form-group row">
+                    <label className="col-sm-3 form-control-label">Password</label>
+                    <div className="col-sm-6">
+                        <input className="form-control" id="profile_pw" type="text" placeholder={oldPw}
+                               ref={(node) => payload.pw = node }/>
+                    </div>
                 </div>
-            </div>
-            <div className="form-group row">
-                <label className="col-sm-3 form-control-label">Password Confirmation</label>
-                <div className="col-sm-6">
-                    <input className="form-control" id="pwconf" type="text" placeholder={oldPw}
-                           ref={(node) => payload.pwconf = node }/>
+                <div className="form-group row">
+                    <label className="col-sm-3 form-control-label">Password Confirmation</label>
+                    <div className="col-sm-6">
+                        <input className="form-control" id="profile_pwconf" type="text" placeholder={oldPw}
+                               ref={(node) => payload.pwconf = node }/>
+                    </div>
                 </div>
-            </div>
 
-            <div className="form-group row">
-                <span className="col-sm-3 form-control-label"></span>
-                <div className="col-sm-9">
-                    <button className="btn btn-primary" type="submit" onClick={() => {dispatch(updateProfile(payload))}}>Update</button>
+                <div className="form-group row">
+                    <span className="col-sm-3 form-control-label"></span>
+                    <div className="col-sm-9">
+                        <button className="btn btn-primary" id="profile_update_btn" type="submit" onClick={() => {dispatch(updateProfile(payload))}}>Update</button>
+                    </div>
                 </div>
-            </div>
-            
-        </form>
+                
+            </form>
+        </div>
     )
 }
 

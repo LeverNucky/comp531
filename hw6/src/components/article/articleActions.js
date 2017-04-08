@@ -1,5 +1,6 @@
 import Action, { resource,updateError} from '../../actions'
 
+//refresh all articles
 export function fetchArticles() {
 	return (dispatch)=>resource('GET', 'articles')
         .then((response)=>{
@@ -8,11 +9,11 @@ export function fetchArticles() {
                 object[item._id] = item;
                 return object;
             },{})
-            console.log()
            	dispatch({type:Action.UPDATE_ARTICLES, articles});
     })
 }
 
+//add article
 export function uploadArticle(fd) {
 	return (dispatch)=>{
         resource('POST','article',fd,false)
@@ -24,6 +25,7 @@ export function uploadArticle(fd) {
     }
 }
 
+//update article
 export function updateArticle(id,article){
     return (dispatch) => {
         resource('PUT', `articles/${id}`,{'text':article})
@@ -32,7 +34,7 @@ export function updateArticle(id,article){
         })
     }
 }
-
+//update comments
 export function updateComment(id,comment,commentId=-1){
     return (dispatch) => {
         resource('PUT', `articles/${id}`,{'text':comment,commentId})
@@ -43,6 +45,12 @@ export function updateComment(id,comment,commentId=-1){
         
     }
 }
+
+export function searchKeyword(keyword) {
+    return { type: Action.SEARCH_KEYWORD, keyword }
+}
+
+// Below are functions that toggle the attribute of an article
 
 export function toggleShowComments(_id){
         return (dispatch)=>{
@@ -60,7 +68,4 @@ export function toggleEditMode(_id){
         return (dispatch)=>{
             dispatch({type:Action.TOGGLE_EDIT_MODE,_id})
         }
-}
-export function searchKeyword(keyword) {
-	return { type: Action.SEARCH_KEYWORD, keyword }
 }

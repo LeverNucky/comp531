@@ -22,10 +22,10 @@ const Nav = ({username, onProfile, dispatch}) => (
                     <ul className="nav navbar-nav navbar-right">
                         { onProfile ?
                             <li><button className="btn btn-default" onClick={() => { dispatch(navToMain()) }}><span className="glyphicon glyphicon-home"/> Home</button></li>:
-                            <li><button className="btn btn-default" onClick={() => { dispatch(navToProfile()) }}><span className="glyphicon glyphicon-user"/> Edit Profile</button></li>
+                            <li><button className="btn btn-default" id="profile_btn" onClick={() => { dispatch(navToProfile()) }}><span className="glyphicon glyphicon-user"/> Edit Profile</button></li>
                         
                         }
-                        <li><button className="btn btn-default" onClick={() => { dispatch(logout()) }}><span className="glyphicon glyphicon-log-out"/>Log out {username} </button></li>
+                        <li><button className="btn btn-default" id="logout_btn" onClick={() => { dispatch(logout()) }}><span className="glyphicon glyphicon-log-out"/>Log out {username} </button></li>
                         <li>&nbsp;</li>>
                     </ul>
                 </div>

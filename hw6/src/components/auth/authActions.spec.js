@@ -4,7 +4,7 @@ import fetch,{mock} from 'mock-fetch'
 import {login,logout} from './authActions'
 
 describe('Validate Authentication',()=>{
-    let resource,url,Action
+    let resource,url,Action, Reducer
 
     beforeEach(()=>{
         if(mockery.enable) {
@@ -15,6 +15,7 @@ describe('Validate Authentication',()=>{
         resource = require('../../actions').resource
         url  = require('../../actions').apiUrl
         Action = require('../../actions').default
+        Reducer=require('../../reducers').default
     })
     afterEach(()=>{
         if (mockery.enable) {
@@ -38,15 +39,13 @@ describe('Validate Authentication',()=>{
     it('should log in a user',(done)=>{
         const username = "qw13"
         const password = "west-state-killed"
-        let count = 0;
+        let count = 2;
         mock(`${url}/login`,{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json'
             },
-            json: {
-                username,result:"success"
-            }
+            json: {username,password}
         })
 
         login(username,password)((action)=>{
@@ -54,33 +53,40 @@ describe('Validate Authentication',()=>{
                 if(action.type==Action.LOGIN){
                     expect(action.username).to.eql(username)
                 }
-                count++;
+                count--;
             }catch(e){
                 done(e)
             }
         }).then(()=>{
-            expect(count).to.eql(2)
+            expect(count).to.eql(0)
         }).then(done)
         .catch(done)
     })
+
     it('should log out a user',(done)=>{
+        const username = "qw13"
+        const password = "west-state-killed"
+
+        mock(`${url}/login`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            json: {password,username}
+        })
         mock(`${url}/logout`,{
             method:'PUT',
-            headers: {'Content-Type': 'application/json'},
-            json:{text:'OK'}
+            headers: {'Content-Type': 'application/json'}
         })
-        let count=1;
-        logout()((action)=>{
-            try{
-                if(action.type==Action.LOGOUT){
-                    expect(action.username).to.eql('')
-                }
-                count--;
-            }catch(e){
-                done(e)
-            }           
-        }).then(()=>{
-                expect(count).to.eql(0)
-        }).then(done).catch(done)
+        let state = undefined
+        const dispatch = (action) => {
+            state = Reducer(state, action)
+        }
+
+        login(username, password)(dispatch)
+        .then(() => {
+            logout()((action)=>{
+            })
+        })
+        .then(done)
+        .catch(done)
     })
 })

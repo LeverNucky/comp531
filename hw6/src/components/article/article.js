@@ -9,19 +9,22 @@ export const Article = ({dispatch,username,_id,avatar,author,date,text,img,comme
 		<div>
 			<div className="well">
 				<h4>
-	                <img className="followingImage" src={ avatar }/>
-	                {author} posted on {date}
+	                <img className="followingImage" src={ avatar } />
+	                <div className="article_author">
+	                	{author} posted on {date}
+	                </div>
 	            </h4>
 
 				{img===undefined ||img===null ? '':<img src={img} className="img-responsive img-rounded centerImg"/>}
 				<div contentEditable={editMode} onInput={(e)=>{
       				newArticle=e.target.innerHTML
-                }}>
+                }} className="article-text">
 					{text}
 				</div>
 				<div className="text-center">
-					<button type="button" className="btn btn-warning"
+					<button type="button" className="btn btn-warning edit_post_btn"
 							style={(username===author)?{}:{display:'none'}}
+							
 							onClick={() => {
 								if (editMode){
 									dispatch(updateArticle(_id,newArticle))

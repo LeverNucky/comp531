@@ -18,7 +18,7 @@ export const NewArticle=({dispatch})=>{
             <div className="well">
                 <div>
                     <h5>Post something:</h5>
-                    <textarea className="newPostBody"
+                    <textarea className="newPostBody" id="newPostBody"
                                 cols="80" rows="4" placeholder="Post something here"
                                 ref={(node) => {newArticle = node}}>
                     </textarea>
@@ -29,7 +29,7 @@ export const NewArticle=({dispatch})=>{
                 
                 <div>
                     <div className="text-right">
-                        <input className="btn btn-info" type="button" value="Publish new article"
+                        <input className="btn btn-info" type="button" value="Publish new article" id="newArticle_btn"
                                 onClick={() => {
                                     fd.append('text', newArticle.value)
                                     dispatch(uploadArticle(fd))

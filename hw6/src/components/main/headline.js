@@ -11,12 +11,12 @@ const Headline =({username,headline,avatar,dispatch})=>{
                 <h3 id="username">{username}</h3>
                     <img className="img-responsive img-rounded centerImg"
                         src={avatar}/>
-                    <h4 id="headline">{headline}</h4>
+                    <h4 id="headline_show">{headline}</h4>
                     <input className="form-control" id="headline" type="text"
                         placeholder="update your headline"
                         ref={ (node) => {newHeadline = node}}/>
                     <div>
-                        <input className="btn btn-info btn-md"
+                        <input className="btn btn-info btn-md" id="headline_btn"
                             type="button" value="Update your Headline"
                                 onClick={() => {
                                     dispatch(updateHeadline(newHeadline.value))

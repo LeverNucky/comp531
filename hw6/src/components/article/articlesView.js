@@ -5,14 +5,14 @@ import Article from './article'
 import NewArticle from './newArticle'
 import { searchKeyword } from './articleActions'
 
-const ArticlesView = ({username, articles, dispatch}) => {
+export const ArticlesView = ({username, articles, dispatch}) => {
     let keyword = ''
     return (
         <div>
             <h3>News Feed</h3>
             <div className="well">
                 <div>
-                    <input className="form-control" type="text" placeholder="search your feed"
+                    <input className="form-control" type="text" placeholder="search your feed" id="search"
                            ref={(node) => keyword = node }
                            onChange={() => { dispatch(searchKeyword(keyword.value)) }}/>
                 </div>
@@ -68,5 +68,3 @@ export default connect(
         }
     }
 )(ArticlesView)
-
-export { ArticlesView as PureArticlesView }

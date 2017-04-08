@@ -1,10 +1,16 @@
 import Action, {updateSuccess, updateError, resource } from '../../actions'
 
-
-
 export function updateHeadline(headline) {
+    const action = { type: Action.UPDATE_PROFILE }
     return (dispatch) => {
-        dispatch(updateField('headline', headline))
+        resource('PUT', 'headline', {headline})
+        .then((response) => {
+            action.headline=response.headline
+            dispatch(action)
+        })
+        .catch((err)=>{
+            dispatch(updateError(err))
+        })
     }
 }
 
@@ -45,11 +51,30 @@ function updateField(field, value) {
     return (dispatch) => {
         //General method for updating one field
         const action = { type: Action.UPDATE_PROFILE }
-        action[field] = value
+
         if (field == 'dob')
             dispatch(updateError('Can\'t change dob'))
-        else
-            dispatch(action)
+        if (value){
+            let payload
+            switch(field){
+                case 'email': payload={email:value}; break;
+                case 'zipcode': payload={zipcode:value}; break;
+                case 'password': payload={password:value}; break;
+            }
+            resource('PUT',field,payload)
+            .then((r)=>{
+                action[field] = r[field]
+                if(field=="password"){
+                    dispatch(updateSuccess("You can't change your password, sorry."))
+                }
+                else{
+                    dispatch(action)
+                }
+                
+            })
+        }
+        
+        
     }
 }
 
@@ -80,7 +105,7 @@ export const uploadImage=(fd)=> {
         resource('PUT','avatar',fd,false)
         .then((response)=>{
             dispatch(updateSuccess("Successfully updated!"))
-            dispatch(updateField('avatar',response.avatar))
+            dispatch({type:Action.UPDATE_PROFILE,avatar:response.avatar})
         }).catch((err)=>{
             dispatch(updateError(err))
         })
