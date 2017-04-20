@@ -1,0 +1,12 @@
+1.I hope to learn how to build a userful website and I think I know how to do it now
+
+2.I enjoy creating a web application from scratch. It feels like I really accomplish something huge.
+
+3.The course workload is fair imo
+
+4.I think the gap between learning Redux and finishing HW4 is kind of big. I hope we can add some simple exercises
+to learn Redux first and then face the problem like we did in HW4
+
+5. Demits seems unfair in most of the assignments. It really sucks if you spent so much like and got 50 pts only because some demits. I mean we need to get punished by not following the instructions. However, the penalty seems
+too huge for me.
+
