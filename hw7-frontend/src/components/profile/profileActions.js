@@ -73,7 +73,7 @@ function updateField(field, value) {
                 }
             })
             .catch((err)=>{
-            dispatch(updateError(err))
+                dispatch(updateError(err))
             })
         }
         
@@ -98,6 +98,9 @@ function fetchField(field) {
                     action.dob = r.dob; break;
             }
             dispatch(action)
+        })
+        .catch((err)=>{
+            dispatch(updateError(err))
         })
         
     }
