@@ -2,7 +2,7 @@
 
 2.I enjoy creating a web application from scratch. It feels like I really accomplish something huge.
 
-3.The course workload is fair imo
+3.The course workload is fair imo.
 
 4.I think the gap between learning Redux and finishing HW4 is kind of big. I hope we can add some simple exercises
 to learn Redux first and then face the problem like we did in HW4
